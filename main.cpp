@@ -1,8 +1,52 @@
 #include <iostream>
 #include <string>
-#include <CLI11.hpp>
+#include <vector>
+#include "CLI11.hpp"
+#include "rapidcsv/src/rapidcsv.h"
 
 using namespace std;
+
+#define CSV_FILENAME "todo.csv"
+
+struct Data
+{
+	uint32_t id;
+	string task;
+	int created;
+	bool done;
+};
+
+class Storer
+{
+public:
+	virtual bool Save() = 0;
+	virtual bool Load() = 0;
+	virtual ~Storer() {};
+
+private:
+	vector<Data> tasks;
+};
+
+class CSVFile : public Storer
+{
+public:
+	CSVFile() : m_filename(CSV_FILENAME)
+	{
+		cout << "csv file: " << m_filename << endl;
+	}
+
+	bool Save() override
+	{
+		return true;
+	}
+
+	bool Load() override
+	{
+		return true;
+	}
+private:
+	string m_filename;
+};
 
 int main(int argc, char** argv)
 {
@@ -20,8 +64,9 @@ int main(int argc, char** argv)
 	CLI::App *complete = app.add_subcommand("complete", "complete task");
 	complete->add_option("ID", num, "task ID")->required();
 
-
     CLI11_PARSE(app, argc, argv);
+
+	CSVFile csv;
 
 	return 0;
 }
