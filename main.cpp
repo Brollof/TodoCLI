@@ -11,6 +11,8 @@ namespace fs = std::filesystem;
 
 #define CSV_FILENAME "todo.csv"
 
+using Labels = vector<string>;
+
 struct Data
 {
     Data(uint32_t id_, string task_, string created_, bool done_)
@@ -80,10 +82,33 @@ public:
         return m_data;
     }
 
+    static const Labels GetLabels()
+    {
+        return {"ID", "Task", "Created", "Done"};
+    }
+
 private:
     CSVFile() = delete;
     const string m_filename;
 };
+
+static void print_table(const vector<Data> &data)
+{
+    for (const string &lab : CSVFile::GetLabels())
+    {
+        cout << lab << "       ";
+    }
+
+    cout << endl;
+
+    for (const auto &row : data)
+    {
+        cout << row.id << "   " <<
+        row.task << "   " <<
+        row.created << "   " <<
+        row.done << endl;
+    }
+}
 
 int main(int argc, char** argv)
 {
@@ -102,23 +127,24 @@ int main(int argc, char** argv)
     CLI::App *complete = app.add_subcommand("complete", "complete task");
     complete->add_option("ID", num, "task ID")->required();
 
+
     CLI11_PARSE(app, argc, argv);
 
     CSVFile csv(CSV_FILENAME);
 
-    if (!task_desc.empty())
+    if (*add && !task_desc.empty())
     {
         csv.AppendRow({csv.GetNextID(), task_desc, "22:02", false});
     }
-
-    auto &data = csv.GetData();
-    for (const auto &row : data)
+    else if (*list)
     {
-        cout << row.id << "," <<
-        row.task << "," <<
-        row.created << "," <<
-        row.done << endl;
+        auto &data = csv.GetData();
+        cout << "LIST" << endl;
+        print_table(data);
     }
+
+
+
 
 
     return 0;
