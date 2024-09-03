@@ -1,73 +1,131 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
+
 #include "CLI11.hpp"
 #include "rapidcsv/src/rapidcsv.h"
 
 using namespace std;
+namespace fs = std::filesystem;
 
 #define CSV_FILENAME "todo.csv"
 
 struct Data
 {
-	uint32_t id;
-	string task;
-	int created;
-	bool done;
+    Data(uint32_t id_, string task_, string created_, bool done_)
+    : id(id_), task(task_), created(created_), done(done_) {}
+    uint32_t id;
+    string task;
+    string created;
+    bool done;
 };
 
 class Storer
 {
 public:
-	virtual bool Save() = 0;
-	virtual bool Load() = 0;
-	virtual ~Storer() {};
+    virtual void AppendRow(const Data &row) = 0;
+    virtual uint32_t GetNextID() const = 0;
+    virtual ~Storer() {};
 
-private:
-	vector<Data> tasks;
+protected:
+    vector<Data> m_data;
+    uint32_t m_next_id;
 };
 
 class CSVFile : public Storer
 {
 public:
-	CSVFile() : m_filename(CSV_FILENAME)
-	{
-		cout << "csv file: " << m_filename << endl;
-	}
+    CSVFile(const string &filename) : m_filename(filename)
+    {
+        // Create file if it doesn't exist
+        if (fs::exists(m_filename) == false)
+        {
+            ofstream output(m_filename);
+        }
 
-	bool Save() override
-	{
-		return true;
-	}
+        cout << "csv file: " << m_filename << endl;
 
-	bool Load() override
-	{
-		return true;
-	}
+        rapidcsv::Document doc(m_filename);
+
+        for (size_t i = 0; i < doc.GetRowCount(); i++)
+        {
+            unsigned long id = doc.GetCell<unsigned long>("ID", i);
+            string task = doc.GetCell<string>("Task", i);
+            string created = doc.GetCell<string>("Created", i);
+            unsigned long done = doc.GetCell<unsigned long>("Done", i);
+            m_data.push_back({static_cast<uint32_t>(id), task, created, static_cast<bool>(done)});
+        }
+
+        m_next_id = m_data.back().id + 1;
+    }
+
+    void AppendRow(const Data &row) override
+    {
+        rapidcsv::Document doc(m_filename);
+        // const vector<string> labels = {"ID", "Task", "Created", "Done"};
+        // const vector<string> v1 = {"0", "zrob zakupy", "18:56", "false"};
+        // const vector<string> v2 = {"1", "idz spac", "15:56", "true"};
+        // doc.InsertRow(-1, labels);
+        // doc.InsertRow(0, v1);
+        // doc.InsertRow(1, v2);
+        doc.SetCell<unsigned long>("ID", row.id, row.id);
+        doc.SetCell<string>("Task", row.id, row.task);
+        doc.SetCell<string>("Created", row.id, row.created);
+        doc.SetCell<unsigned long>("Done", row.id, row.done);
+        doc.Save();
+    }
+
+    uint32_t GetNextID() const override
+    {
+        return m_next_id;
+    }
+
+    vector<Data> &GetData()
+    {
+        return m_data;
+    }
+
 private:
-	string m_filename;
+    CSVFile() = delete;
+    const string m_filename;
 };
 
 int main(int argc, char** argv)
 {
-	CLI::App app{"App description"};
+    CLI::App app{"App description"};
 
-	string tmp = "";
-	uint32_t num = -1;
+    string task_desc = "";
+    uint32_t num = -1;
 
-	CLI::App *add = app.add_subcommand("add", "add a new task");
-	add->add_option("task", tmp)->required();
+    CLI::App *add = app.add_subcommand("add", "add a new task");
+    add->add_option("task", task_desc)->required();
 
-	CLI::App *list = app.add_subcommand("list", "show undone tasks");
-	list->add_flag("--all", "show all tasks");
+    CLI::App *list = app.add_subcommand("list", "show undone tasks");
+    list->add_flag("--all", "show all tasks");
 
-	CLI::App *complete = app.add_subcommand("complete", "complete task");
-	complete->add_option("ID", num, "task ID")->required();
+    CLI::App *complete = app.add_subcommand("complete", "complete task");
+    complete->add_option("ID", num, "task ID")->required();
 
     CLI11_PARSE(app, argc, argv);
 
-	CSVFile csv;
+    CSVFile csv(CSV_FILENAME);
 
-	return 0;
+    if (!task_desc.empty())
+    {
+        csv.AppendRow({csv.GetNextID(), task_desc, "22:02", false});
+    }
+
+    auto &data = csv.GetData();
+    for (const auto &row : data)
+    {
+        cout << row.id << "," <<
+        row.task << "," <<
+        row.created << "," <<
+        row.done << endl;
+    }
+
+
+    return 0;
 }
 
