@@ -63,12 +63,6 @@ public:
     void AppendRow(const Data &row) override
     {
         rapidcsv::Document doc(m_filename);
-        // const vector<string> labels = {"ID", "Task", "Created", "Done"};
-        // const vector<string> v1 = {"0", "zrob zakupy", "18:56", "false"};
-        // const vector<string> v2 = {"1", "idz spac", "15:56", "true"};
-        // doc.InsertRow(-1, labels);
-        // doc.InsertRow(0, v1);
-        // doc.InsertRow(1, v2);
         doc.SetCell<unsigned long>("ID", row.id, row.id);
         doc.SetCell<string>("Task", row.id, row.task);
         doc.SetCell<string>("Created", row.id, row.created);
@@ -94,6 +88,7 @@ private:
 int main(int argc, char** argv)
 {
     CLI::App app{"App description"};
+    app.require_subcommand();
 
     string task_desc = "";
     uint32_t num = -1;
