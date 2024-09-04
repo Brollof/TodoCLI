@@ -35,27 +35,22 @@ AllTasks &CSVFile::GetData()
 void CSVFile::Save() const
 {
     rapidcsv::Document doc(m_filename);
-    // doc.Clear();
-    doc.InsertRow<std::string>(-1, {"ID", "Task", "Created", "Done"});
-    // doc.InsertRow<std::string>(0, {"a", "b", "c", "d"});
-    // doc.InsertRow<std::string>(1, {"a", "b", "c", "d"});
-    // doc.InsertRow<std::string>(2, {"a", "b", "c", "d"});
-    // doc.InsertRow<std::string>(3, {"a", "b", "c", "d"});
-    doc.Save();
+    doc.Clear();
+    doc.InsertRow<std::string>(-1, CSVFile::GetLabels());
 
     for (size_t i = 0; i < m_data.size(); i++)
     {
         const TaskData &row = m_data[i];
-        std::cout << "Saving row: " << row.id << ","
-        << row.task << ","
-        << row.created << ","
-        << row.done << std::endl;
 
-        // doc.InsertRow<TaskData>(i);
-        doc.SetCell<unsigned long>("ID", i, row.id);
-        doc.SetCell<std::string>("Task", i, row.task);
-        doc.SetCell<std::string>("Created", i, row.created);
-        doc.SetCell<unsigned long>("Done", i, row.done);
+        const std::vector<std::string> line =
+        {
+            std::to_string(row.id),
+            row.task,
+            row.created,
+            std::to_string(row.done)
+        };
+
+        doc.InsertRow<std::string>(i, line);
     }
 
     doc.Save();

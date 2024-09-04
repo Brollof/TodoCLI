@@ -14,11 +14,6 @@ void Todo::AppendRow(TaskData &row)
 void Todo::Save() const
 {
     m_store.Save();
-    // doc.SetCell<unsigned long>("ID", row.id, row.id);
-    // doc.SetCell<string>("Task", row.id, row.task);
-    // doc.SetCell<string>("Created", row.id, row.created);
-    // doc.SetCell<unsigned long>("Done", row.id, row.done);
-    // doc.Save();
 }
 
 
@@ -30,5 +25,5 @@ uint32_t Todo::GetNextID() const
         return 0;
     }
 
-    return data.back().id;
+    return data.back().id + 1;
 }
