@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "CSVFile.hpp"
-#include "rapidcsv/src/rapidcsv.h"
+#include "libs/rapidcsv/rapidcsv.h"
 
 CSVFile::CSVFile(const std::string &filename) : m_filename(filename)
 {
