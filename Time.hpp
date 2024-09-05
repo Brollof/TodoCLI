@@ -24,24 +24,18 @@ public:
         auto diff = tpNow - tpOld;
 
         uint64_t days = std::chrono::duration_cast<std::chrono::days>(diff).count();
-        uint64_t hours = std::chrono::duration_cast<std::chrono::hours>(diff).count();
-        uint64_t minutes = std::chrono::duration_cast<std::chrono::minutes>(diff).count();
-        uint64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(diff).count();
-
-        std::cout << "Days: " << days << std::endl;
-        std::cout << "Hours: " << hours << std::endl;
-        std::cout << "Minutes: " << minutes << std::endl;
-        std::cout << "Seconds: " << seconds << std::endl;
-
         if (days == 1)  return "1 day ago";
         if (days > 1) return std::to_string(days) + " days ago";
 
+        uint64_t hours = std::chrono::duration_cast<std::chrono::hours>(diff).count();
         if (hours == 1) return "1 hour ago";
         if (hours > 1) return std::to_string(hours) + " hours ago";
 
+        uint64_t minutes = std::chrono::duration_cast<std::chrono::minutes>(diff).count();
         if (minutes == 1) return "1 minute ago";
         if (minutes > 1) return std::to_string(minutes) + " minutes ago";
 
+        uint64_t seconds = std::chrono::duration_cast<std::chrono::seconds>(diff).count();
         if (seconds == 1) return "1 second ago";
         if (seconds > 1) return std::to_string(seconds) + " seconds ago";
 

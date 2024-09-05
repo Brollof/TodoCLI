@@ -25,7 +25,7 @@ static void print_table(const vector<TaskData> &data)
     {
         cout << row.id << "   " <<
         row.task << "   " <<
-        row.created << "   " <<
+        Time::GetTimeStringUntilNow(row.created) << "   " <<
         row.done << endl;
     }
 }
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     {
         auto &data = csv.GetData();
         cout << "LIST" << endl;
-        // print_table(data);
+        print_table(data);
 
         // From time point to epoch
         // const auto now = chrono::system_clock::now();
