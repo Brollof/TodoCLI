@@ -6,6 +6,7 @@
 #include "TaskData.hpp"
 #include "CSVFile.hpp"
 #include "Todo.hpp"
+#include "Time.hpp"
 
 #define CSV_FILENAME "todo.csv"
 
@@ -53,7 +54,7 @@ int main(int argc, char** argv)
 
     if (*add && !task_desc.empty())
     {
-        TaskData row = {task_desc, "22:02", false};
+        TaskData row = {task_desc, Time::GetNow(), false};
         todoList.AppendRow(row);
         todoList.Save();
     }
@@ -61,7 +62,24 @@ int main(int argc, char** argv)
     {
         auto &data = csv.GetData();
         cout << "LIST" << endl;
-        print_table(data);
+        // print_table(data);
+
+        // From time point to epoch
+        // const auto now = chrono::system_clock::now();
+        // auto now_s = std::chrono::time_point_cast<std::chrono::seconds>(now);
+        // uint32_t epoch_now = now_s.time_since_epoch().count();
+
+        // uint32_t epoch_old = 1725304015;
+
+        // auto tp_now = epoch_to_time_point(epoch_now);
+        // cout << "Now: ";
+        // print_time_point(tp_now);
+
+        // auto tp_old = epoch_to_time_point(epoch_old);
+        // cout << "Old: ";
+        // print_time_point(tp_old);
+
+        // GetTimeText(tp_old, tp_now);
     }
 
     return 0;

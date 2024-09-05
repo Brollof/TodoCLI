@@ -4,10 +4,10 @@
 
 struct TaskData
 {
-    TaskData(std::string task_, std::string created_, bool done_, uint32_t id_ = 0)
+    TaskData(std::string task_, uint32_t created_, bool done_, uint32_t id_ = 0)
     : task(task_), created(created_), done(done_), id(id_) {}
     std::string task;
-    std::string created;
+    uint32_t created;
     bool done;
     uint32_t id;
 };

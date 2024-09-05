@@ -19,11 +19,11 @@ CSVFile::CSVFile(const std::string &filename) : m_filename(filename)
 
     for (size_t i = 0; i < doc.GetRowCount(); i++)
     {
-        unsigned long id = doc.GetCell<unsigned long>("ID", i);
+        uint32_t id = doc.GetCell<unsigned long>("ID", i);
         std::string task = doc.GetCell<std::string>("Task", i);
-        std::string created = doc.GetCell<std::string>("Created", i);
-        unsigned long done = doc.GetCell<unsigned long>("Done", i);
-        m_data.push_back({task, created, static_cast<bool>(done), static_cast<uint32_t>(id)});
+        uint32_t created = doc.GetCell<unsigned long>("Created", i);
+        uint32_t done = doc.GetCell<unsigned long>("Done", i);
+        m_data.push_back({task, created, static_cast<bool>(done), id});
     }
 }
 
@@ -46,7 +46,7 @@ void CSVFile::Save() const
         {
             std::to_string(row.id),
             row.task,
-            row.created,
+            std::to_string(row.created),
             std::to_string(row.done)
         };
 
