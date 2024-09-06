@@ -12,6 +12,7 @@ public:
     void Save() const;
     bool RemoveItem(uint32_t id);
     bool MarkAsComplete(uint32_t id);
+    void PrintRow(uint32_t id);
 
 private:
     Todo() = delete;
