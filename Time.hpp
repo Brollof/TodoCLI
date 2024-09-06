@@ -4,8 +4,6 @@
 #include <iostream>
 #include <chrono>
 
-using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
-
 class Time
 {
 public:
@@ -43,6 +41,8 @@ public:
     }
 
 private:
+    using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
+
     Time();
 
     static Timepoint EpochToTimepoint(uint32_t epoch)
@@ -51,7 +51,7 @@ private:
         return Timepoint(dur);
     }
 
-    static void print_time_point(const Timepoint &tp)
+    static void PrintTimepoint(const Timepoint &tp)
     {
 
         const time_t startWallTime = std::chrono::system_clock::to_time_t(tp);
