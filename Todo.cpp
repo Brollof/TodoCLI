@@ -27,3 +27,32 @@ uint32_t Todo::GetNextID() const
 
     return data.back().id + 1;
 }
+
+bool Todo::RemoveItem(uint32_t id)
+{
+    int32_t index = -1;
+    auto &data = m_store.GetData();
+
+    for (uint32_t i = 0; i < data.size(); i++)
+    {
+        if (id == data[i].id)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    if (index >= 0)
+    {
+        data.erase(data.begin() + index);
+        m_store.Save();
+        return true;
+    }
+
+    return false;
+}
+
+bool Todo::MarkAsComplete(uint32_t id)
+{
+    return true;
+}

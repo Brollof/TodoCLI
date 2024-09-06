@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     app.require_subcommand();
 
     string taskDesc = "";
-    int32_t idNum = -1;
+    uint32_t idNum = 0;
 
     CLI::App *add = app.add_subcommand("add", "add a new task");
     add->add_option("task", taskDesc)->required();
@@ -74,27 +74,15 @@ int main(int argc, char** argv)
         }
         csv.Save();
     }
-    else if (*del && idNum >= 0)
+    else if (*del)
     {
-        int32_t index = -1;
-        for (uint32_t i = 0; i < data.size(); i++)
+        if (todoList.RemoveItem(idNum))
         {
-            if (idNum == data[i].id)
-            {
-                index = i;
-                break;
-            }
-        }
-
-        if (index >= 0)
-        {
-            data.erase(data.begin() + index);
-            csv.Save();
             cout << "Task " << idNum << " has been deleted." << endl;
         }
         else
         {
-            cout << "No task with ID = " << idNum << "." << endl;
+            cout << "Couldn't delete task with ID = " << idNum << "." << endl;
         }
     }
     else if (*list)

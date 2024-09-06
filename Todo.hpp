@@ -10,6 +10,8 @@ public:
     void AppendRow(TaskData &row);
     uint32_t GetNextID() const;
     void Save() const;
+    bool RemoveItem(uint32_t id);
+    bool MarkAsComplete(uint32_t id);
 
 private:
     Todo() = delete;
