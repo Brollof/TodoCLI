@@ -54,5 +54,15 @@ bool Todo::RemoveItem(uint32_t id)
 
 bool Todo::MarkAsComplete(uint32_t id)
 {
-    return true;
+    auto data = m_store.GetData();
+    for (TaskData &row : m_store.GetData())
+    {
+        if (id == row.id)
+        {
+            row.done = true;
+            m_store.Save();
+            return true;
+        }
+    }
+    return false;
 }

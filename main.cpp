@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     app.require_subcommand();
 
     string taskDesc = "";
-    uint32_t idNum = 0;
+    uint32_t id = 0;
 
     CLI::App *add = app.add_subcommand("add", "add a new task");
     add->add_option("task", taskDesc)->required();
@@ -45,10 +45,10 @@ int main(int argc, char** argv)
     list->add_flag("--all", "show all tasks");
 
     CLI::App *complete = app.add_subcommand("complete", "complete task");
-    complete->add_option("ID", idNum, "task ID")->required();
+    complete->add_option("ID", id, "task ID")->required();
 
     CLI::App *del = app.add_subcommand("delete", "delete a task");
-    del->add_option("ID", idNum, "task ID")->required();
+    del->add_option("ID", id, "task ID")->required();
 
     CLI11_PARSE(app, argc, argv);
 
@@ -62,27 +62,26 @@ int main(int argc, char** argv)
         todoList.AppendRow(row);
         todoList.Save();
     }
-    else if (*complete && idNum >= 0)
+    else if (*complete)
     {
-        for (TaskData &row : data)
+        if (todoList.MarkAsComplete(id))
         {
-            if (idNum == row.id)
-            {
-                row.done = true;
-                break;
-            }
-        }
-        csv.Save();
-    }
-    else if (*del)
-    {
-        if (todoList.RemoveItem(idNum))
-        {
-            cout << "Task " << idNum << " has been deleted." << endl;
+            print_table(data);
         }
         else
         {
-            cout << "Couldn't delete task with ID = " << idNum << "." << endl;
+            cout << "Couldn't complete task with ID = " << id << "." << endl;
+        }
+    }
+    else if (*del)
+    {
+        if (todoList.RemoveItem(id))
+        {
+            print_table(data);
+        }
+        else
+        {
+            cout << "Couldn't delete task with ID = " << id << "." << endl;
         }
     }
     else if (*list)
