@@ -1,6 +1,5 @@
 #include <filesystem>
 #include <fstream>
-#include <iostream>
 
 #include "CSVFile.hpp"
 #include "libs/rapidcsv/rapidcsv.h"
@@ -12,8 +11,6 @@ CSVFile::CSVFile(const std::string &filename) : m_filename(filename)
     {
         std::ofstream output(m_filename);
     }
-
-    std::cout << "csv file: " << m_filename << std::endl;
 
     rapidcsv::Document doc(m_filename);
 

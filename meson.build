@@ -4,6 +4,10 @@ project('todocli', 'cpp',
 
 src = ['main.cpp', 'CSVFile.cpp', 'Todo.cpp']
 
+if get_option('buildtype') == 'custom'
+  add_project_arguments('-Ofast', '-g3',  language : 'cpp')
+endif
+
 executable('todocli',
            sources: src,
            install : true)

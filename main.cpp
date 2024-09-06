@@ -35,32 +35,70 @@ int main(int argc, char** argv)
     CLI::App app{"App description"};
     app.require_subcommand();
 
-    string task_desc = "";
-    uint32_t num = -1;
+    string taskDesc = "";
+    int32_t idNum = -1;
 
     CLI::App *add = app.add_subcommand("add", "add a new task");
-    add->add_option("task", task_desc)->required();
+    add->add_option("task", taskDesc)->required();
 
     CLI::App *list = app.add_subcommand("list", "show undone tasks");
     list->add_flag("--all", "show all tasks");
 
     CLI::App *complete = app.add_subcommand("complete", "complete task");
-    complete->add_option("ID", num, "task ID")->required();
+    complete->add_option("ID", idNum, "task ID")->required();
+
+    CLI::App *del = app.add_subcommand("delete", "delete a task");
+    del->add_option("ID", idNum, "task ID")->required();
 
     CLI11_PARSE(app, argc, argv);
 
     CSVFile csv(CSV_FILENAME);
     Todo todoList(csv);
+    auto &data = csv.GetData();
 
-    if (*add && !task_desc.empty())
+    if (*add && !taskDesc.empty())
     {
-        TaskData row = {task_desc, Time::GetNow(), false};
+        TaskData row = {taskDesc, Time::GetNow(), false};
         todoList.AppendRow(row);
         todoList.Save();
     }
+    else if (*complete && idNum >= 0)
+    {
+        for (TaskData &row : data)
+        {
+            if (idNum == row.id)
+            {
+                row.done = true;
+                break;
+            }
+        }
+        csv.Save();
+    }
+    else if (*del && idNum >= 0)
+    {
+        int32_t index = -1;
+        for (uint32_t i = 0; i < data.size(); i++)
+        {
+            if (idNum == data[i].id)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index >= 0)
+        {
+            data.erase(data.begin() + index);
+            csv.Save();
+            cout << "Task " << idNum << " has been deleted." << endl;
+        }
+        else
+        {
+            cout << "No task with ID = " << idNum << "." << endl;
+        }
+    }
     else if (*list)
     {
-        auto &data = csv.GetData();
         cout << "LIST" << endl;
         print_table(data);
 
