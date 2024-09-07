@@ -1,14 +1,13 @@
 #include "Todo.hpp"
 
-Todo::Todo(StoreInterface<TaskData> &store) : m_store(store)
-{
-}
-
+Todo::Todo(StoreInterface<TaskData> &store) :
+    m_store(store), m_data(m_store.GetData())
+{ }
 
 void Todo::AppendRow(TaskData &row)
 {
     row.id = GetNextID();
-    m_store.GetData().push_back(row);
+    m_data.push_back(row);
 }
 
 void Todo::Save() const
@@ -16,26 +15,23 @@ void Todo::Save() const
     m_store.Save();
 }
 
-
 uint32_t Todo::GetNextID() const
 {
-    const auto &data = m_store.GetData();
-    if (data.size() == 0)
+    if (m_data.size() == 0)
     {
         return 0;
     }
 
-    return data.back().id + 1;
+    return m_data.back().id + 1;
 }
 
 bool Todo::RemoveItem(uint32_t id)
 {
     int32_t index = -1;
-    auto &data = m_store.GetData();
 
-    for (uint32_t i = 0; i < data.size(); i++)
+    for (uint32_t i = 0; i < m_data.size(); i++)
     {
-        if (id == data[i].id)
+        if (id == m_data[i].id)
         {
             index = i;
             break;
@@ -44,7 +40,7 @@ bool Todo::RemoveItem(uint32_t id)
 
     if (index >= 0)
     {
-        data.erase(data.begin() + index);
+        m_data.erase(m_data.begin() + index);
         m_store.Save();
         return true;
     }
@@ -54,7 +50,7 @@ bool Todo::RemoveItem(uint32_t id)
 
 bool Todo::MarkAsComplete(uint32_t id)
 {
-    for (TaskData &row : m_store.GetData())
+    for (TaskData &row : m_data)
     {
         if (id == row.id)
         {
