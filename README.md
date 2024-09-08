@@ -16,8 +16,46 @@ Todo CLI is a simple and efficient command-line to-do list application designed 
 This program was created for educational purposes to demonstrate basic concepts of command-line applications, CSV file handling and printing data in tabular format.
 
 ## Usage
-Run the Todo CLI program in your terminal and use the following commands to manage your tasks:\
-./todocli add [task] — Add a new task.\
-./todocli delete [task ID] — Remove a task by its ID.\
-./todocli complete [task ID] — Mark a task as done.\
-./todocli list — Display all tasks in a table format.
+### Prerequisites
+To build the Todo CLI program, you will need to use the Meson build system. Follow the steps below to install Meson and build the program on a Linux system.
+
+### Installing Meson
+1. Install Meson using your package manager. For example, on Debian-based systems like Ubuntu, you can run:
+```bash
+sudo apt update
+sudo apt install meson
+```
+
+Alternatively, you can install Meson using pip:
+```bash
+pip install meson
+```
+2. Install Ninja, a small build system that Meson uses:
+```bash
+sudo apt install ninja-build
+```
+
+### Building the Program
+1. Clone the repository:
+```bash
+git clone https://github.com/Brollof/TodoCLI.git
+cd TodoCLI
+```
+2. Set up the build directory:
+```bash
+meson setup builddir
+```
+3. Build the program:
+```bash
+meson compile -C builddir
+```
+4. Run the Todo CLI program:
+```bash
+./builddir/todo-cli
+```
+### Commands
+Use the following commands to manage your tasks:
+- add [task] — Add a new task.
+- delete [task ID] — Remove a task by its ID.
+- complete [task ID] — Mark a task as done.
+- list — Display all tasks in a table format.
