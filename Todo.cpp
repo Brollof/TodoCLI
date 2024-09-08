@@ -1,13 +1,17 @@
 #include "Todo.hpp"
+#include "Printer.hpp"
 
 Todo::Todo(StoreInterface<TaskData> &store) :
     m_store(store), m_data(m_store.GetData())
-{ }
+{
 
-void Todo::AppendRow(TaskData &row)
+}
+
+uint32_t Todo::AppendRow(TaskData &row)
 {
     row.id = GetNextID();
     m_data.push_back(row);
+    return row.id;
 }
 
 void Todo::Save() const
@@ -60,4 +64,28 @@ bool Todo::MarkAsComplete(uint32_t id)
         }
     }
     return false;
+}
+
+void Todo::PrintRow(uint32_t id, bool done)
+{
+    if (done)
+    {
+        Printer::RowWithDone(m_data, id);
+    }
+    else
+    {
+        Printer::Row(m_data, id);
+    }
+}
+
+void Todo::PrintAll(bool done)
+{
+    if (done)
+    {
+        Printer::AllWithDone(m_data);
+    }
+    else
+    {
+        Printer::All(m_data);
+    }
 }

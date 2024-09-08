@@ -6,7 +6,6 @@
 #include "TaskData.hpp"
 
 using Labels = std::vector<std::string>;
-using AllTasks = std::vector<TaskData>;
 
 class CSVFile : public StoreInterface<TaskData>
 {

@@ -12,24 +12,6 @@
 
 using namespace std;
 
-static void print_table(const vector<TaskData> &data)
-{
-    for (const string &lab : CSVFile::GetLabels())
-    {
-        cout << lab << "       ";
-    }
-
-    cout << endl;
-
-    for (const auto &row : data)
-    {
-        cout << row.id << "   " <<
-        row.task << "   " <<
-        Time::GetTimeStringUntilNow(row.created) << "   " <<
-        row.done << endl;
-    }
-}
-
 int main(int argc, char** argv)
 {
     CLI::App app{"App description"};
@@ -37,12 +19,13 @@ int main(int argc, char** argv)
 
     string taskDesc = "";
     uint32_t id = 0;
+    bool all = false;
 
     CLI::App *add = app.add_subcommand("add", "add a new task");
     add->add_option("task", taskDesc)->required();
 
     CLI::App *list = app.add_subcommand("list", "show undone tasks");
-    list->add_flag("--all", "show all tasks");
+    list->add_flag("--all", all, "show all tasks");
 
     CLI::App *complete = app.add_subcommand("complete", "complete task");
     complete->add_option("ID", id, "task ID")->required();
@@ -56,17 +39,18 @@ int main(int argc, char** argv)
     Todo todoList(csv);
     auto &data = csv.GetData();
 
-    if (*add && !taskDesc.empty())
+    if (*add)
     {
         TaskData row = {taskDesc, Time::GetNow(), false};
-        todoList.AppendRow(row);
+        uint32_t id = todoList.AppendRow(row);
         todoList.Save();
+        todoList.PrintRow(id);
     }
     else if (*complete)
     {
         if (todoList.MarkAsComplete(id))
         {
-            print_table(data);
+            todoList.PrintRow(id, true);
         }
         else
         {
@@ -77,7 +61,7 @@ int main(int argc, char** argv)
     {
         if (todoList.RemoveItem(id))
         {
-            print_table(data);
+            todoList.PrintAll();
         }
         else
         {
@@ -86,27 +70,15 @@ int main(int argc, char** argv)
     }
     else if (*list)
     {
-        cout << "LIST" << endl;
-        print_table(data);
-
-        // From time point to epoch
-        // const auto now = chrono::system_clock::now();
-        // auto now_s = std::chrono::time_point_cast<std::chrono::seconds>(now);
-        // uint32_t epoch_now = now_s.time_since_epoch().count();
-
-        // uint32_t epoch_old = 1725304015;
-
-        // auto tp_now = epoch_to_time_point(epoch_now);
-        // cout << "Now: ";
-        // print_time_point(tp_now);
-
-        // auto tp_old = epoch_to_time_point(epoch_old);
-        // cout << "Old: ";
-        // print_time_point(tp_old);
-
-        // GetTimeText(tp_old, tp_now);
+        if (all)
+        {
+            todoList.PrintAll(true);
+        }
+        else
+        {
+            todoList.PrintAll();
+        }
     }
 
     return 0;
 }
-

@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+struct TaskData;
+using AllTasks = std::vector<TaskData>;
 
 struct TaskData
 {
