@@ -1,5 +1,5 @@
 #include "Printer.hpp"
-#include "libs/tabulate/tabulate.hpp"
+#include "tabulate/tabulate.hpp"
 #include "Time.hpp"
 
 void Printer::Row(const AllTasks &data, uint32_t id)

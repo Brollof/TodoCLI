@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "libs/CLI11/CLI11.hpp"
+#include "CLI11/CLI11.hpp"
 #include "TaskData.hpp"
 #include "CSVFile.hpp"
 #include "Todo.hpp"
@@ -37,7 +37,6 @@ int main(int argc, char** argv)
 
     CSVFile csv(CSV_FILENAME);
     Todo todoList(csv);
-    auto &data = csv.GetData();
 
     if (*add)
     {

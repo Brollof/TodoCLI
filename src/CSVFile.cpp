@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "CSVFile.hpp"
-#include "libs/rapidcsv/rapidcsv.h"
+#include "rapidcsv/rapidcsv.h"
 
 CSVFile::CSVFile(const std::string &filename) : m_filename(filename)
 {
