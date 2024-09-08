@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "CLI11/CLI11.hpp"
 #include "TaskData.hpp"
@@ -19,13 +18,11 @@ int main(int argc, char** argv)
 
     string taskDesc = "";
     uint32_t id = 0;
-    bool all = false;
 
     CLI::App *add = app.add_subcommand("add", "add a new task");
     add->add_option("task", taskDesc)->required();
 
     CLI::App *list = app.add_subcommand("list", "show undone tasks");
-    list->add_flag("--all", all, "show all tasks");
 
     CLI::App *complete = app.add_subcommand("complete", "complete task");
     complete->add_option("ID", id, "task ID")->required();
@@ -49,7 +46,7 @@ int main(int argc, char** argv)
     {
         if (todoList.MarkAsComplete(id))
         {
-            todoList.PrintRow(id, true);
+            todoList.PrintRow(id);
         }
         else
         {
@@ -69,14 +66,7 @@ int main(int argc, char** argv)
     }
     else if (*list)
     {
-        if (all)
-        {
-            todoList.PrintAll(true);
-        }
-        else
-        {
-            todoList.PrintAll();
-        }
+        todoList.PrintAll();
     }
 
     return 0;

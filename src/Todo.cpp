@@ -66,26 +66,12 @@ bool Todo::MarkAsComplete(uint32_t id)
     return false;
 }
 
-void Todo::PrintRow(uint32_t id, bool done)
+void Todo::PrintRow(uint32_t id)
 {
-    if (done)
-    {
-        Printer::RowWithDone(m_data, id);
-    }
-    else
-    {
-        Printer::Row(m_data, id);
-    }
+    Printer::Row(m_data, id);
 }
 
-void Todo::PrintAll(bool done)
+void Todo::PrintAll()
 {
-    if (done)
-    {
-        Printer::AllWithDone(m_data);
-    }
-    else
-    {
-        Printer::All(m_data);
-    }
+    Printer::All(m_data);
 }

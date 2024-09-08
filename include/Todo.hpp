@@ -11,8 +11,8 @@ public:
     void Save() const;
     bool RemoveItem(uint32_t id);
     bool MarkAsComplete(uint32_t id);
-    void PrintRow(uint32_t id, bool done = false);
-    void PrintAll(bool done = false);
+    void PrintRow(uint32_t id);
+    void PrintAll();
 
 private:
     Todo() = delete;
