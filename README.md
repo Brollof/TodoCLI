@@ -51,7 +51,7 @@ meson compile -C builddir
 ```
 4. Run the Todo CLI program:
 ```bash
-./builddir/todo-cli
+./builddir/todocli
 ```
 ### Commands
 Use the following commands to manage your tasks:
