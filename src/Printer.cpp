@@ -36,7 +36,7 @@ void Printer::RowWithDone(const AllTasks &data, uint32_t id)
                 {std::to_string(row.id),
                 row.task,
                 Time::GetTimeStringUntilNow(row.created),
-                std::to_string(row.done)
+                row.done ? "true" : "false"
             });
             break;
         }
@@ -73,7 +73,7 @@ void Printer::AllWithDone(const AllTasks &data)
             {std::to_string(row.id),
             row.task,
             Time::GetTimeStringUntilNow(row.created),
-            std::to_string(row.done)
+            row.done ? "true" : "false"
         });
     }
 
