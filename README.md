@@ -10,6 +10,7 @@ Todo CLI is a simple and efficient command-line to-do list application designed 
   - Task: description of the task.
   - Created: how long ago the task was created.
   - Done: status of the task (completed or not).
+- Persistent storage: all tasks are stored on disk in a CSV format, ensuring that your tasks are saved between sessions.
 
 ## Usage
 Run the Todo CLI program in your terminal and use the following commands to manage your tasks:\
